@@ -1,0 +1,302 @@
+/* Social Media Downloader - Content Script Styles */
+
+/* Download Button Base Styles */
+.smd-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+}
+
+.smd-download-btn:hover {
+  background: rgba(0, 0, 0, 0.85);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.smd-download-btn:active {
+  transform: translateY(0);
+}
+
+.smd-download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.smd-download-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.smd-btn-text {
+  margin-left: 6px;
+}
+
+/* Instagram Specific Styles */
+.smd-instagram-btn {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  border: none;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.smd-instagram-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* YouTube Specific Styles */
+.smd-youtube-btn {
+  background: #cc0000;
+  border: none;
+  color: white;
+  font-family: Roboto, Arial, sans-serif;
+  border-radius: 18px;
+  padding: 8px 16px;
+}
+
+.smd-youtube-btn:hover {
+  background: #990000;
+}
+
+/* Twitter Specific Styles */
+.smd-twitter-btn {
+  background: transparent;
+  border: none;
+  color: rgb(113, 118, 123);
+  padding: 8px;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+}
+
+.smd-twitter-btn:hover {
+  background: rgba(29, 155, 240, 0.1);
+  color: rgb(29, 155, 240);
+}
+
+.smd-twitter-btn-container {
+  display: flex;
+  align-items: center;
+}
+
+/* TikTok Specific Styles */
+.smd-tiktok-btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.smd-tiktok-btn:hover {
+  background: #fff;
+  transform: scale(1.1);
+}
+
+.smd-tiktok-btn .smd-btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Spinner Animation */
+.smd-spinner {
+  animation: smd-spin 1s linear infinite;
+}
+
+@keyframes smd-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Notification Styles */
+.smd-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  background: white;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 999999;
+  transform: translateX(400px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  max-width: 300px;
+}
+
+.smd-notification-show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.smd-notification-success {
+  background: #10b981;
+  color: white;
+}
+
+.smd-notification-error {
+  background: #ef4444;
+  color: white;
+}
+
+.smd-notification-warning {
+  background: #f59e0b;
+  color: white;
+}
+
+/* Quality Selection Dialog */
+.smd-quality-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.smd-dialog-content {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.smd-dialog-content h3 {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+}
+
+.smd-quality-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.smd-quality-option {
+  padding: 12px 16px;
+  background: #f3f4f6;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.smd-quality-option:hover {
+  background: #e5e7eb;
+  border-color: #3b82f6;
+}
+
+.smd-dialog-cancel {
+  width: 100%;
+  padding: 12px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  transition: background 0.2s ease;
+}
+
+.smd-dialog-cancel:hover {
+  background: #e5e7eb;
+}
+
+/* Video Overlay for Download Button */
+.smd-video-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .smd-notification {
+    background: #1f2937;
+    color: #f3f4f6;
+  }
+  
+  .smd-dialog-content {
+    background: #1f2937;
+    color: #f3f4f6;
+  }
+  
+  .smd-dialog-content h3 {
+    color: #f3f4f6;
+  }
+  
+  .smd-quality-option {
+    background: #374151;
+    color: #f3f4f6;
+  }
+  
+  .smd-quality-option:hover {
+    background: #4b5563;
+  }
+  
+  .smd-dialog-cancel {
+    background: #374151;
+    color: #d1d5db;
+  }
+  
+  .smd-dialog-cancel:hover {
+    background: #4b5563;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .smd-notification {
+    right: 10px;
+    top: 10px;
+    max-width: calc(100% - 20px);
+  }
+  
+  .smd-download-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  
+  .smd-dialog-content {
+    padding: 20px;
+  }
+}

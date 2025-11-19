@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Downloader</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+          <path d="M16 10v8m0 0v4m0-4l-4-4m4 4l4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+              <stop offset="0%" stop-color="#3b82f6"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <h1>Social Media Downloader</h1>
+      </div>
+    </header>
+
+    <!-- Ethical Agreement Notice -->
+    <div id="ethical-notice" class="ethical-notice hidden">
+      <div class="notice-content">
+        <h3>⚠️ Important: Ethical Usage</h3>
+        <p>This extension is designed to help you:</p>
+        <ul>
+          <li>Download your own content for backup</li>
+          <li>Download content where the creator has explicitly enabled downloads</li>
+          <li>Download content with proper permission</li>
+        </ul>
+        <p><strong>Please respect:</strong></p>
+        <ul>
+          <li>Copyright and intellectual property rights</li>
+          <li>Creator preferences and privacy</li>
+          <li>Platform terms of service</li>
+        </ul>
+        <p class="notice-warning">
+          Using this tool to download content without permission may violate laws and platform policies.
+        </p>
+        <div class="agreement-actions">
+          <label class="checkbox-label">
+            <input type="checkbox" id="agree-checkbox">
+            <span>I understand and agree to use this tool ethically and legally</span>
+          </label>
+          <button id="agree-btn" class="btn btn-primary" disabled>Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+      <!-- Platform Detection -->
+      <section class="section">
+        <h2>Current Page</h2>
+        <div class="platform-status">
+          <div class="status-indicator" id="platform-indicator">
+            <div class="status-icon">🔍</div>
+            <div class="status-text">
+              <div class="status-platform" id="platform-name">Detecting...</div>
+              <div class="status-subtitle" id="platform-subtitle">Checking current page</div>
+            </div>
+          </div>
+          <button id="quick-download-btn" class="btn btn-primary" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            Quick Download
+          </button>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" data-tab="history">History</button>
+        <button class="tab" data-tab="settings">Settings</button>
+      </div>
+
+      <!-- History Tab -->
+      <section id="history-tab" class="tab-content active">
+        <div class="history-list" id="history-list">
+          <div class="empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <p>No downloads yet</p>
+            <p class="empty-subtitle">Your download history will appear here</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Tab -->
+      <section id="settings-tab" class="tab-content">
+        <div class="settings-group">
+          <label class="setting-item">
+            <span class="setting-label">
+              <span class="setting-title">Default Quality</span>
+              <span class="setting-description">Preferred video quality for downloads</span>
+            </span>
+            <select id="quality-setting" class="setting-select">
+              <option value="best">Best Available</option>
+              <option value="1080p">1080p</option>
+              <option value="720p">720p</option>
+              <option value="480p">480p</option>
+              <option value="360p">360p</option>
+            </select>
+          </label>
+
+          <label class="setting-item">
+            <span class="setting-label">
+              <span class="setting-title">Auto-Download</span>
+              <span class="setting-description">Start downloading immediately without confirmation</span>
+            </span>
+            <label class="toggle">
+              <input type="checkbox" id="auto-download-setting">
+              <span class="toggle-slider"></span>
+            </label>
+          </label>
+
+          <label class="setting-item">
+            <span class="setting-label">
+              <span class="setting-title">Filename Format</span>
+              <span class="setting-description">How downloaded files should be named</span>
+            </span>
+            <select id="filename-setting" class="setting-select">
+              <option value="[platform]_[username]_[timestamp]">Platform_User_Timestamp</option>
+              <option value="[username]_[timestamp]">User_Timestamp</option>
+              <option value="[platform]_[timestamp]">Platform_Timestamp</option>
+              <option value="[timestamp]">Timestamp Only</option>
+            </select>
+          </label>
+
+          <label class="setting-item">
+            <span class="setting-label">
+              <span class="setting-title">Theme</span>
+              <span class="setting-description">Extension appearance</span>
+            </span>
+            <select id="theme-setting" class="setting-select">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="settings-footer">
+          <button id="clear-history-btn" class="btn btn-secondary">Clear History</button>
+          <button id="save-settings-btn" class="btn btn-primary">Save Settings</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="#" id="help-link">Help</a>
+        <span class="separator">•</span>
+        <a href="#" id="about-link">About</a>
+      </div>
+      <div class="footer-note">
+        <small>Use responsibly. Respect copyrights and creator rights.</small>
+      </div>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
