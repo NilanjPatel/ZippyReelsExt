@@ -139,7 +139,13 @@
       const videoInfo = await getVideoInfo();
       
       if (!videoInfo.url) {
-        throw new Error('Could not extract video URL. Please ensure you have permission to download this video.');
+        throw new Error('Could not extract video URL.\n\n' +
+          '📌 YouTube uses DASH streaming (blob URLs).\n' +
+          '✅ Try downloading:\n' +
+          '   • Your own uploaded videos (via YouTube Studio)\n' +
+          '   • Videos with download enabled by creator\n' +
+          '   • Use YouTube Premium\'s offline feature\n\n' +
+          '💡 Note: Most YouTube videos require YouTube Data API for programmatic download.');
       }
       
       // Show quality selection dialog
@@ -213,18 +219,28 @@
     
     // Get video URL (this is simplified - in production you'd need to use YouTube's API)
     let videoUrl = videoElement?.src || videoElement?.currentSrc;
-    
+
     // Note: YouTube videos are often delivered via blob URLs or DASH streaming
     // A production extension would need to either:
     // 1. Use YouTube Data API with proper authentication
     // 2. Use a backend service to fetch video URLs
     // 3. Only work with videos that allow embedding/downloading
-    
+
     if (!videoUrl || videoUrl.startsWith('blob:')) {
-      // Check if this is the user's own video or a video that allows downloading
-      const isOwnVideo = await checkIfOwnVideo();
-      if (!isOwnVideo) {
-        videoUrl = null; // Can't download this video
+      console.log('YouTube blob URL detected, attempting alternative methods...');
+
+      // Try to extract from YouTube's player data
+      const extractedUrl = await extractYouTubeVideoUrl();
+      if (extractedUrl) {
+        console.log('Extracted video URL from YouTube data');
+        videoUrl = extractedUrl;
+      } else {
+        // Check if this is the user's own video or a video that allows downloading
+        const isOwnVideo = await checkIfOwnVideo();
+        if (!isOwnVideo) {
+          console.warn('Cannot download: Not user\'s own video and no direct URL available');
+          videoUrl = null; // Can't download this video
+        }
       }
     }
     
@@ -236,6 +252,48 @@
     };
   }
   
+  // Try to extract video URL from YouTube's player data
+  async function extractYouTubeVideoUrl() {
+    try {
+      // YouTube stores player data in ytInitialPlayerResponse
+      if (window.ytInitialPlayerResponse) {
+        const playerResponse = window.ytInitialPlayerResponse;
+
+        // Try to get from streamingData
+        if (playerResponse.streamingData) {
+          const formats = playerResponse.streamingData.formats || [];
+          const adaptiveFormats = playerResponse.streamingData.adaptiveFormats || [];
+          const allFormats = [...formats, ...adaptiveFormats];
+
+          // Find highest quality video+audio format
+          const videoFormat = allFormats
+            .filter(f => f.url && f.mimeType && f.mimeType.includes('video'))
+            .sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0))[0];
+
+          if (videoFormat && videoFormat.url) {
+            console.log('Found video URL in YouTube player data');
+            return videoFormat.url;
+          }
+        }
+      }
+
+      // Try to find in page scripts
+      const scripts = document.querySelectorAll('script');
+      for (const script of scripts) {
+        const content = script.textContent;
+        if (content && content.includes('streamingData')) {
+          // This would need more sophisticated parsing
+          console.log('Found streamingData in script, but parsing required');
+        }
+      }
+
+    } catch (error) {
+      console.error('Error extracting YouTube video URL:', error);
+    }
+
+    return null;
+  }
+
   // Check if this is the user's own video
   async function checkIfOwnVideo() {
     // Check if there's an edit button (indicates ownership)

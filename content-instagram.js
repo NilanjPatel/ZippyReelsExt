@@ -131,9 +131,15 @@
       
       // Extract video URL
       const videoUrl = await extractVideoUrl(videoElement);
-      
+
       if (!videoUrl) {
-        throw new Error('Could not find video URL. This video may be protected.');
+        throw new Error('Could not extract video URL.\n\n' +
+          '📌 Instagram uses protected streaming URLs.\n' +
+          '✅ Try downloading:\n' +
+          '   • Your own uploaded content\n' +
+          '   • Posts where you have edit access\n' +
+          '   • Content with explicit download permission\n\n' +
+          '💡 Alternative: Use Instagram\'s "Save" feature or download from your Archive.');
       }
       
       // Get username and post info
@@ -195,7 +201,7 @@
   async function extractVideoUrl(videoElement) {
     // Try to get the source URL
     let videoUrl = videoElement.src || videoElement.currentSrc;
-    
+
     if (!videoUrl || videoUrl.startsWith('blob:')) {
       // Try to find source element
       const source = videoElement.querySelector('source');
@@ -203,17 +209,58 @@
         videoUrl = source.src;
       }
     }
-    
-    // If still blob URL, we may need to extract from network requests
+
+    // If still blob URL, try to extract from Instagram's page data
     if (videoUrl && videoUrl.startsWith('blob:')) {
+      console.log('Blob URL detected, attempting to extract real URL from page data...');
+
+      // Try to find video URL in Instagram's embedded data
+      const videoUrlFromPage = await extractVideoUrlFromPageData(videoElement);
+      if (videoUrlFromPage) {
+        console.log('Found video URL in page data:', videoUrlFromPage);
+        return videoUrlFromPage;
+      }
+
       // This is a limitation - blob URLs can't be directly downloaded
-      // In a real implementation, you'd need to use Instagram's API or
-      // intercept network requests, which requires additional permissions
-      console.warn('Blob URL detected - direct download not possible');
+      // Instagram uses blob URLs for security and to prevent easy downloading
+      console.warn('Blob URL detected - direct download not possible without Instagram API');
+      console.info('💡 Tip: This video can only be downloaded if you have permission from the creator or if it\'s your own content.');
       return null;
     }
-    
+
     return videoUrl;
+  }
+
+  // Try to extract video URL from Instagram's page data
+  async function extractVideoUrlFromPageData(videoElement) {
+    try {
+      // Instagram embeds video data in <script> tags as JSON
+      const scripts = document.querySelectorAll('script[type="application/ld+json"], script:not([src])');
+
+      for (const script of scripts) {
+        const content = script.textContent;
+        if (!content) continue;
+
+        // Look for video URLs in the script content
+        const videoUrlMatches = content.match(/https:\/\/[^"'\s]+\.mp4[^"'\s]*/gi);
+        if (videoUrlMatches && videoUrlMatches.length > 0) {
+          // Return the first high-quality video URL found
+          const highQualityUrl = videoUrlMatches.find(url => !url.includes('_n.mp4')) || videoUrlMatches[0];
+          return highQualityUrl;
+        }
+      }
+
+      // Try to find in window.__additionalDataLoaded or similar objects
+      if (window._sharedData || window.__additionalDataLoaded) {
+        console.log('Found Instagram data objects, searching for video URL...');
+        // This would need more specific logic based on Instagram's current data structure
+      }
+
+    } catch (error) {
+      console.error('Error extracting video URL from page data:', error);
+    }
+
+    return null;
   }
   
   // Extract username from page
