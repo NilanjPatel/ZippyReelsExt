@@ -49,17 +49,17 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "32": "icons/icon32.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/ZippyReels.png",
+      "32": "icons/ZippyReels.png",
+      "48": "icons/ZippyReels.png",
+      "128": "icons/ZippyReels.png"
     }
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/ZippyReels.png",
+    "32": "icons/ZippyReels.png",
+    "48": "icons/ZippyReels.png",
+    "128": "icons/ZippyReels.png"
   },
   "commands": {
     "download-video": {
