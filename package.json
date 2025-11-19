@@ -1,0 +1,27 @@
+{
+  "name": "zippyreels-extension",
+  "version": "1.0.0",
+  "description": "Browser extension to download social media content ethically",
+  "scripts": {
+    "validate": "./validate-extension.sh",
+    "lint": "echo 'No linting configured yet'",
+    "test": "echo 'No tests configured yet'",
+    "dev": "echo 'Load the extension in your browser at chrome://extensions/ - Enable Developer mode and click Load unpacked'",
+    "build": "echo 'No build required - this is a plain JavaScript extension. Just load it in your browser!'",
+    "package": "zip -r zippyreels-extension.zip . -x '*.git*' -x 'node_modules/*' -x '*.md' -x 'generate-icons.html' -x 'validate-extension.sh' -x '.DS_Store'"
+  },
+  "keywords": [
+    "browser-extension",
+    "chrome-extension",
+    "social-media",
+    "downloader",
+    "instagram",
+    "youtube",
+    "tiktok",
+    "twitter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
